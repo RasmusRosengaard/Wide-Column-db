@@ -1,7 +1,12 @@
+# HINT TIL NÆSTE GANG
+- Opsætnings Docker csommands
+- Og ellers kör videre au naturél
+
 # Wide-Column-db
 - Eksemplet her tager udgangspunkt i Apache Cassandra
 
 # Generic Info
+- Link til opgavens udgangspunkt fra Kenneth's Magiske Verden: https://ucl.kjc.dk/softwaredev/2026/dfu/dfu-exercise-other-databases
 - Wide-column databases expand the key-value store concept from two columns to multiple columns, but only the columns needed for that record.
 - Kaldes også 'Columnar', etc. // TODO: Udfyld resten her
 
@@ -63,3 +68,7 @@ Håndtering af store datamængder
 
 # Extra Stuff
 https://cassandra.apache.org/_/quickstart.html
+
+https://www.scylladb.com/glossary/wide-column-database/
+
+https://database.guide/what-is-a-column-store-database/
