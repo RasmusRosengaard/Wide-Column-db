@@ -16,7 +16,7 @@
 - En Row har et unikt ID 'row key' som identificer rækken unikt = Primary Key
 - Hver Column har Name, Value & Timestamp
 
-* Cassandra specifikt har 'Composite Columns', som gør det muligt at nest'e objekter i en kolonne
+* Cassandra specifikt har 'Composite Columns' (også kaldet 'Clustering Columns'), som gør det muligt at nest'e objekter i en kolonne
  - F.eks. 
 
 # Opsætning
@@ -24,11 +24,24 @@
 
 # CRUD Operations Eksempler
 
+> Create et Keyspace
+- 
+> Create en Column-Family
+- 
+> Create en Row i Column-Family'en
+- 
+> Create Columns i en Row
+- 
+> Create en Row med Composite/Clustered Columns
+- 
 
 # Pros & Cons
 > Pros:
 - Open-source
 - Top 1 på DB-Engine ranking
+- Compression: Column store DB'er er meget effektive til data-compression
+- Aggregation Queries: Column store DB'er er gode til disse, f.eks. Sum, Count & Average
+- Scalability: Column store DB'er er gode til parallel processering, hvilket indebærer at data er fordelt på mange clusters
 - 
 
 
