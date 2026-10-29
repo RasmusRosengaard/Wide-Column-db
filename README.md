@@ -3,8 +3,9 @@
 
 # Generic Info
 - Wide-column databases expand the key-value store concept from two columns to multiple columns, but only the columns needed for that record.
+- Kaldes også 'Columnar', etc. // TODO: Udfyld resten her
 
-> RDBMS vs. Wide-Column
+## RDBMS vs. Wide-Column
 - Mere fleksibelt fordi hver column ('row' i relationelle) kan have sine egne unikke columns i samme column-family ('tabel' i relationelle)
 - Sagt på en anden måde, hver række bestemmer sine egne kolonner (og kan have forskellige datatyper ** TODO: INDSÆT BILLEDE EKSEMPEL HER ** )
 - En column har
@@ -24,40 +25,40 @@
 
 # CRUD Operations Eksempler
 
-> Create et Keyspace
-- 
-> Create en Column-Family
-- 
-> Create en Row i Column-Family'en
-- 
-> Create Columns i en Row
-- 
-> Create en Row med Composite/Clustered Columns
-- 
+## Create et Keyspace
+
+## Create en Column-Family
+
+## Create en Row i Column-Family'en
+
+## Create Columns i en Row
+
+## Create en Row med Composite/Clustered Columns
+
 
 # Pros & Cons
-> Pros:
+## Pros:
 - Open-source
 - Top 1 på DB-Engine ranking
 - Compression: Column store DB'er er meget effektive til data-compression
 - Aggregation Queries: Column store DB'er er gode til disse, f.eks. Sum, Count & Average
-- Scalability: Column store DB'er er gode til parallel processering, hvilket indebærer at data er fordelt på mange clusters
-- 
+- Scalability: Column store DB'er er gode til parallel processering, hvilket indebærer at data er fordelt på mange clusters af maskiner
+- Fast to Load & Query: En milliard rows kan loades indenfor et par sekunder & derfor kan Wide Column stores være gode til Big Data
+- Vi query'er mod kun de kolonner vi søger, da de er adskilte, modsat en relationel DB hvor en tabel skal igennem 
 
-
-> Cons:
+## Cons:
 - Term-forvirring - Wide column forvirres typisk med Columnar (f.eks. ved Googling af 'Wide column store vs. relational database')
 - Wide column store databaser også kan være multi-model, så man skal være opmærksom på at de kan indeholde extra funktionalitet udover wide-column-specifik
-- 
+ 
 
 # Refleksion
 
 
 # Yderligere Emner
-> Skalérbarhed
--
-> Performance
-> Håndtering af store datamængder
+## Skalérbarhed
+
+## Performance
+Håndtering af store datamængder
 
 
 # Extra Stuff
