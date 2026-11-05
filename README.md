@@ -4,18 +4,21 @@
 
 # Wide-Column-db
 - Eksemplet her tager udgangspunkt i Apache Cassandra
+- Andre Wide Column DB'er: ScyllaDB, HBase, BigTable
 
 # Generic Info
 - Link til opgavens udgangspunkt fra Kenneth's Magiske Verden:
-
-- https://ucl.kjc.dk/softwaredev/2026/dfu/dfu-exercise-other-databases
-- Wide-column databases expand the key-value store concept from two columns to multiple columns, but only the columns needed for that record.
+https://ucl.kjc.dk/softwaredev/2026/dfu/dfu-exercise-other-databases
+- Wide-column databases expand the key-value store concept from two columns to multiple columns, but only the columns needed for that record/row.
 - Kaldes også 'Columnar', etc. // TODO: Udfyld resten her
 
 ## RDBMS vs. Wide-Column
-- Mere fleksibelt fordi hver column ('row' i relationelle) kan have sine egne unikke columns i samme column-family ('tabel' i relationelle)
+- Mere fleksibelt fordi hver row kan have sine egne unikke columns, samlet i samme column-family ('tabel' i relationelle)
+- Eksempel:
+"user1" -> [name: "Ana", email: "ana@odense.dk"]
+"user2" -> [name: "Michael P.", phone: "12345678", city: "Vejle"]
+
 - Sagt på en anden måde, hver række bestemmer sine egne kolonner (og kan have forskellige datatyper ** TODO: INDSÆT BILLEDE EKSEMPEL HER ** )
-- En column har
 
 - Keyspace = Schema
 - I keyspaces er der column-families = Tabeller
