@@ -22,6 +22,7 @@ https://ucl.kjc.dk/softwaredev/2026/dfu/dfu-exercise-other-databases
 
 - Keyspace = Schema
 - I keyspaces er der column-families = Tabeller
+  * NOTE - Termforvirring: I Cassandra bruges 'column family' som et gammelt navn for tables, som har et defined schema men en row store kun de kolonner den har vaerdier til. I HBase/BigTable er 'column family' en gruppe af columns i en table.
 - Indenfor hver column-family har du Rows = Rækker
 - I hver Row har du unikke Columns = I relationelle DB'er har rækkerne i en tabel eksakt samme Kolonner
 - En Row har et unikt ID 'row key' som identificer rækken unikt = Primary Key
