@@ -10,7 +10,13 @@
 - Link til opgavens udgangspunkt fra Kenneth's Magiske Verden:
 https://ucl.kjc.dk/softwaredev/2026/dfu/dfu-exercise-other-databases
 - Wide-column databases expand the key-value store concept from two columns to multiple columns, but only the columns needed for that record/row.
-- Kaldes også 'Columnar', etc. // TODO: Udfyld resten her
+
+- Data model (Cassandra terms):
+Keyspace → Table → Partition → Row → Column
+
+## Termforvirring at være obs på
+- Cassandra kaldes nogle gange for en Columnar DB - det er det IKKE! ; Wide-column DB'er storer en partition's rows sammen så lookups bliver hurtigere by key, mens Columnar DB'er opbevarer hver column's værdier sammen, for at man kan lave hurtigere analytics across mange rækker.
+- I Cassandra bruges 'column family' som et gammelt navn for tables, som har et defined schema men en row store kun de kolonner den har vaerdier til. I HBase/BigTable er 'column family' en gruppe af columns i en table.
 
 ## RDBMS vs. Wide-Column
 - Mere fleksibelt fordi hver row kan have sine egne unikke columns, samlet i samme column-family ('tabel' i relationelle)
@@ -20,6 +26,11 @@ https://ucl.kjc.dk/softwaredev/2026/dfu/dfu-exercise-other-databases
 
 - Sagt på en anden måde, hver række bestemmer sine egne kolonner (og kan have forskellige datatyper ** TODO: INDSÆT BILLEDE EKSEMPEL HER ** )
 
+// NEW
+
+
+
+// OLD
 - Keyspace = Schema
 - I keyspaces er der column-families = Tabeller
   * NOTE - Termforvirring: I Cassandra bruges 'column family' som et gammelt navn for tables, som har et defined schema men en row store kun de kolonner den har vaerdier til. I HBase/BigTable er 'column family' en gruppe af columns i en table.
