@@ -1,6 +1,6 @@
 # HINT TIL NÆSTE GANG
-- Opsætnings Docker csommands
-- Og ellers kör videre au naturél
+- Sidste session, oprettede Googel Docs for at kunne multi-edit'e samtidig ; hence whyfor README'n her ik' er updated yet med de aendringer
+- Saa note to selves: Husk at tage udgangspunkt i dét naeste gang! (Probs' torsdag d. 12/11)
 
 # Wide-Column-db
 - Eksemplet her tager udgangspunkt i Apache Cassandra
