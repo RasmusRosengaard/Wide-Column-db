@@ -14,7 +14,7 @@ https://ucl.kjc.dk/softwaredev/2026/dfu/dfu-exercise-other-databases
 - Data model (Cassandra terms):
 Keyspace → Table → Partition → Row → Column
 
-## Termforvirring at være obs på
+## Termforvirring at være obs på 🤔
 - Cassandra kaldes nogle gange for en Columnar DB - det er det IKKE! ; Wide-column DB'er storer en partition's rows sammen så lookups bliver hurtigere by key, mens Columnar DB'er opbevarer hver column's værdier sammen, for at man kan lave hurtigere analytics across mange rækker.
 - I Cassandra bruges 'column family' som et gammelt navn for tables, som har et defined schema men en row store kun de kolonner den har vaerdier til. I HBase/BigTable er 'column family' en gruppe af columns i en table.
 
