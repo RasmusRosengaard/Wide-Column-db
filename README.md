@@ -46,7 +46,7 @@ Row (find via clustering key)
 
 Column
 
-## WHEN gi’r Wide Column DB mening at bruge ?
+## Reflexjion - WHEN gi’r Wide Column DB mening at bruge ?
 IoT/Sensor data:
 Masser af data i sekundet | Partition: device, cluster: time
 
@@ -66,7 +66,7 @@ Recommendation & personalization:
 Shopping carts & sessions:
 Simple lookup some bör være Highly Available, på tværs af datacentre
 
-## WHEN ville man nok vælge en anden DB ?
+## Reflexjion - WHEN ville man nok vælge en anden DB ?
 Ved normalisering
 
 Hvis höj skrive-mulighed IKKE er vigtigt for dig
