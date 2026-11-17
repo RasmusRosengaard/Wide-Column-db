@@ -81,12 +81,17 @@ Hvis du skal have striks ACID-overholdelse
 
 
 # Opsaetning A - Docker
+```
 docker network create cassandra
-
+```
+```
 docker run --rm -d --name cassandra --hostname cassandra --network cassandra cassandra
-
+```
+```
 docker exec -it cassandra cqlsh
+```
 
+```
 CREATE KEYSPACE IF NOT EXISTS chat WITH REPLICATION =
 { 'class' : 'SimpleStrategy', 'replication_factor' : '1' };
 
@@ -102,6 +107,7 @@ CREATE TABLE IF NOT EXISTS messages (
 
 INSERT INTO messages (chat_id, sent_at, sender, body)
 VALUES (1, '2026-11-05 10:00:00+0000', 'Ana', 'Hej');
+```
 
 # Opsaetning B - Softwareintegrerings-approach
 DataStax C# Driver
