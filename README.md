@@ -246,9 +246,6 @@ Kompleks at operere
 SQL er nemmere för datastörrelsen kraever skalering
 
 
-# Yderligere Emner
-## Skalérbarhed
-
 ## Performance
 Håndtering af store datamængder
 
