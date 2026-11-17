@@ -132,14 +132,60 @@ PRIMARY KEY 	((chat_id), sent_at)
 # CRUD Operations Eksempler
 
 ## Create et Keyspace
+CREATE KEYSPACE shop
+WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
 
-## Create en Column-Family
+USE shop;
 
-## Create en Row i Column-Family'en
+Create en Column-Family
+
+In CQL a column family is called a table.
+CREATE TABLE users (
+    user_id  text PRIMARY KEY,   -- row key / partition key
+    name     text,
+    email    text
+);
+
+## Create en Table (sometimes A.K.A. "Column-Family")
+In CQL a column family is called a table.
+CREATE TABLE users (
+    user_id  text PRIMARY KEY,   -- row key / partition key
+    name     text,
+    email    text
+);
+
+## Create en Row
+// A row is identified by its row key (user_id).
+INSERT INTO users (user_id) VALUES ('u1');
 
 ## Create Columns i en Row
+// Tomme columns stores ikke ; rows ka' ha' forskellige columns!
+INSERT INTO users (user_id, name, email)
+VALUES ('u1', 'Anna', 'anna@mail.dk');
+
+-- Add a column value to an existing row (upsert)
+UPDATE users SET name = 'Bo' WHERE user_id = 'u2';
+
+-- Add a new column
+ALTER TABLE users ADD phone text;
+UPDATE users SET phone = '12345678' WHERE user_id = 'u1';
 
 ## Create en Row med Composite/Clustered Columns
+customer_id is the partition key, which makes it the wide row. order_date and order_id are clustering columns, so each order is stored as a set of columns inside that row, sorted by date.
+CREATE TABLE orders_by_customer (
+    customer_id text,
+    order_date  date,
+    order_id    text,
+    amount      decimal,
+    PRIMARY KEY ((customer_id), order_date, order_id)
+) WITH CLUSTERING ORDER BY (order_date DESC, order_id ASC);
+
+INSERT INTO orders_by_customer (customer_id, order_date, order_id, amount)
+VALUES ('c1', '2026-11-01', 'o1', 199.95);
+INSERT INTO orders_by_customer (customer_id, order_date, order_id, amount)
+VALUES ('c1', '2026-11-10', 'o2', 49.00);
+
+SELECT * FROM orders_by_customer WHERE customer_id = 'c1';
 
 
 # Pros & Cons
