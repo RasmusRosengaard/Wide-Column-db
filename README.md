@@ -25,15 +25,25 @@ Det er IKKE en Columnar DB !!!
 
 ## Struktur
 Clusters
+
 ▼
+
 Keyspace
+
 ▼
+
 Table *
+
 ▼
+
 Partition (find via partition key)
+
 ▼
+
 Row (find via clustering key)
+
 ▼
+
 Column
 
 ## WHEN gi’r Wide Column DB mening at bruge ?
