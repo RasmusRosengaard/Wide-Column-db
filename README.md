@@ -157,7 +157,8 @@ CREATE TABLE users (
 );
 
 ## Create en Table (sometimes A.K.A. "Column-Family")
-In CQL a column family is called a table.
+-- In CQL a column family is called a table.
+
 CREATE TABLE users (
     user_id  text PRIMARY KEY,   -- row key / partition key
     name     text,
@@ -166,18 +167,24 @@ CREATE TABLE users (
 
 ## Create en Row
 // A row is identified by its row key (user_id).
+
 INSERT INTO users (user_id) VALUES ('u1');
 
 ## Create Columns i en Row
 // Tomme columns stores ikke ; rows ka' ha' forskellige columns!
+
 INSERT INTO users (user_id, name, email)
+
 VALUES ('u1', 'Anna', 'anna@mail.dk');
 
 -- Add a column value to an existing row (upsert)
+
 UPDATE users SET name = 'Bo' WHERE user_id = 'u2';
 
 -- Add a new column
+
 ALTER TABLE users ADD phone text;
+
 UPDATE users SET phone = '12345678' WHERE user_id = 'u1';
 
 ## Create en Row med Composite/Clustered Columns
