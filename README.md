@@ -1,7 +1,3 @@
-# HINT TIL NÆSTE GANG
-- Sidste session, oprettede Googel Docs for at kunne multi-edit'e samtidig ; hence whyfor README'n her ik' er updated yet med de aendringer
-- Saa note to selves: Husk at tage udgangspunkt i dét naeste gang! (Probs' torsdag d. 12/11)
-
 # Wide-Column-db
 - Eksemplet her tager udgangspunkt i Apache Cassandra
 - Andre Wide Column DB'er: ScyllaDB, HBase, BigTable
@@ -18,31 +14,119 @@ Keyspace → Table → Partition → Row → Column
 - Cassandra kaldes nogle gange for en Columnar DB - det er det IKKE! ; Wide-column DB'er storer en partition's rows sammen så lookups bliver hurtigere by key, mens Columnar DB'er opbevarer hver column's værdier sammen, for at man kan lave hurtigere analytics across mange rækker.
 - I Cassandra bruges 'column family' som et gammelt navn for tables, som har et defined schema men en row store kun de kolonner den har vaerdier til. I HBase/BigTable er 'column family' en gruppe af columns i en table.
 
-## RDBMS vs. Wide-Column
-- Mere fleksibelt fordi hver row kan have sine egne unikke columns, samlet i samme column-family ('tabel' i relationelle)
-- Eksempel:
-"user1" -> [name: "Ana", email: "ana@odense.dk"]
-"user2" -> [name: "Michael P.", phone: "12345678", city: "Vejle"]
+## WHAT er Wide Column ?!
+NoSQL-DB, organiserer data i fleksible kolonner - modsat relationel DB kan kolonner variere i navn og format fra række til række.
 
-- Sagt på en anden måde, hver række bestemmer sine egne kolonner (og kan have forskellige datatyper ** TODO: INDSÆT BILLEDE EKSEMPEL HER ** )
+DB’en fordeles på tværs af servere/noder.
 
-// NEW
+Designudgangspunktet er i dine Queries - Ikke i relationerne.
+
+Det er IKKE en Columnar DB !!!
+
+## Struktur
+Clusters
+▼
+Keyspace
+▼
+Table *
+▼
+Partition (find via partition key)
+▼
+Row (find via clustering key)
+▼
+Column
+
+## WHEN gi’r Wide Column DB mening at bruge ?
+IoT/Sensor data:
+Masser af data i sekundet | Partition: device, cluster: time
+
+Timeseries data:
+Masser af data, men typically kun writes ; læs per timerange
+
+Chat & messaging:
+Messages opdelt i conversations, read ‘latest N messages’
+[Discord brugte Cassandra för rykket til ScyllaDB, begge er wide column]
+
+Logging & monitoring:
+Skrives ofte, opdel per timerange
+
+Recommendation & personalization:
+‘Hvad bruger Michael_P har sidst set & clicket på’ [Netflix]
+
+Shopping carts & sessions:
+Simple lookup some bör være Highly Available, på tværs af datacentre
+
+## WHEN ville man nok vælge en anden DB ?
+Ved normalisering
+
+Hvis höj skrive-mulighed IKKE er vigtigt for dig
+
+Hvis data ska’ vaere ens i en tabel
+
+Hvis du ska’ bruge JOINS eller TRANSAKTIONER
+
+Frekvente sletninger og opdateringer på dataerne
+
+Hvis du skal have striks ACID-overholdelse
 
 
+# Opsaetning A - Docker
+docker network create cassandra
 
-// OLD
-- Keyspace = Schema
-- I keyspaces er der column-families = Tabeller
-  * NOTE - Termforvirring: I Cassandra bruges 'column family' som et gammelt navn for tables, som har et defined schema men en row store kun de kolonner den har vaerdier til. I HBase/BigTable er 'column family' en gruppe af columns i en table.
-- Indenfor hver column-family har du Rows = Rækker
-- I hver Row har du unikke Columns = I relationelle DB'er har rækkerne i en tabel eksakt samme Kolonner
-- En Row har et unikt ID 'row key' som identificer rækken unikt = Primary Key
-- Hver Column har Name, Value & Timestamp
+docker run --rm -d --name cassandra --hostname cassandra --network cassandra cassandra
 
-* Cassandra specifikt har 'Composite Columns' (også kaldet 'Clustering Columns'), som gør det muligt at nest'e objekter i en kolonne
- - F.eks. 
+docker exec -it cassandra cqlsh
 
-# Opsætning
+CREATE KEYSPACE IF NOT EXISTS chat WITH REPLICATION =
+{ 'class' : 'SimpleStrategy', 'replication_factor' : '1' };
+
+USE chat;
+
+CREATE TABLE IF NOT EXISTS messages (
+  chat_id int,
+  sent_at timestamp,
+  sender text,
+  body text,
+  PRIMARY KEY (chat_id, sent_at)
+) WITH CLUSTERING ORDER BY (sent_at DESC);
+
+INSERT INTO messages (chat_id, sent_at, sender, body)
+VALUES (1, '2026-11-05 10:00:00+0000', 'Ana', 'Hej');
+
+# Opsaetning B - Softwareintegrerings-approach
+DataStax C# Driver
+
+https://docs.datastax.com/en/developer/csharp-driver/3.4/index.html
+
+NuGet:
+CassandraCSharpDriver
+
+var cluster = Cluster.Builder()
+                     .AddContactPoints("host1")
+                     .Build();
+// Connect to the nodes using a keyspace
+var session = cluster.Connect("sample_keyspace");
+// Execute a query on a connection synchronously
+var rs = session.Execute("SELECT * FROM sample_table");
+// Iterate through the RowSet
+foreach (var row in rs)
+{
+  var value = row.GetValue<int>("sample_int_column");
+  // Do something with the value
+}
+
+# Glossary Help
+Partition Key			(A.K.A. “Row Key” i gammel-Cassandra-tid)
+Bestemmer hvilken node indeholder dataen & grupperer rows ind i en partition
+
+Clustering Key
+Styrer sort order af rows i en partition & gør hver row unik
+
+Primary Key
+Particion Key + Clustering Key(s)
+
+PRIMARY KEY 	((chat_id), sent_at)
+				partition    clustering
 
 
 # CRUD Operations Eksempler
@@ -60,20 +144,30 @@ Keyspace → Table → Partition → Row → Column
 
 # Pros & Cons
 ## Pros:
-- Open-source
-- Top 1 på DB-Engine ranking
-- Compression: Column store DB'er er meget effektive til data-compression
-- Aggregation Queries: Column store DB'er er gode til disse, f.eks. Sum, Count & Average
-- Scalability: Column store DB'er er gode til parallel processering, hvilket indebærer at data er fordelt på mange clusters af maskiner
-- Fast to Load & Query: En milliard rows kan loades indenfor et par sekunder & derfor kan Wide Column stores være gode til Big Data
-- Vi query'er mod kun de kolonner vi søger, da de er adskilte, modsat en relationel DB hvor en tabel skal igennem 
+Open-Source
+
+#1 by score på DB-Engines
+
+Effektiv til data-compression
+
+Scalability: Parallel processering af data fordelt på mange clusters af maskiner
+
+Vi query’er kun mod data vi søger da dataen er opdelt = Bedre performance
 
 ## Cons:
-- Term-forvirring - Wide column forvirres typisk med Columnar (f.eks. ved Googling af 'Wide column store vs. relational database')
-- Wide column store databaser også kan være multi-model, så man skal være opmærksom på at de kan indeholde extra funktionalitet udover wide-column-specifik
- 
+Nogle forskelle i CQL fra standard SQL (Cassandra/ScyllaDB specifik)
 
-# Refleksion
+Ineffektiv opdatering af rækker
+
+Ingen JOINS
+
+Svær data modeling
+I.e. dårlige partition keys giver hot’e eller for store partitioner
+
+Kompleks at operere
+(clusters, repair, tuning)
+
+SQL er nemmere för datastörrelsen kraever skalering
 
 
 # Yderligere Emner
@@ -83,7 +177,7 @@ Keyspace → Table → Partition → Row → Column
 Håndtering af store datamængder
 
 
-# Extra Stuff
+# Semi-helpful links
 https://cassandra.apache.org/_/quickstart.html
 
 https://www.scylladb.com/glossary/wide-column-database/
